@@ -1,0 +1,46 @@
+{% extends "main_layout.html" %}
+{% load static %}
+
+{% block title %}
+    Like
+{% endblock title %}
+
+{% block content %}
+    <h3>Post</h3>
+    {% for post in posts %}
+        <div class="card">
+            <div class="card-body">
+                <h4>{{post.title}}</h4>
+                <p>{{post.body}}</p>
+            </div>
+        </div>
+        <form action="{% url 'like:like_post' %}" method="POST" class="mt-3 like-post" id="{{post.id}}">
+            {% csrf_token %}
+            <input type="hidden" name="post-id" value="{{post.id}}">
+            
+            <button class="btn like-btn{{post.id}}" type="submit">
+                {% if user not in post.liked.all %}
+                Like
+                {% else %}
+                Unlike
+                {% endif %}
+            </button>
+        </form>
+        <div class="row">
+            <div class="col">
+                <strong class="like-value{{post.id}}">
+                    {% with total=post.liked.all.count %}
+                        {{ total }}
+                    {% endwith %}
+                </strong>
+                {% with total=post.liked.all.count %}
+                    like{{ total|pluralize }}
+                {% endwith %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}
+
+{% block end_script %}
+<script src="{% static 'js/like.js' %}" type="text/javascript"></script>
+{% endblock end_script %}
