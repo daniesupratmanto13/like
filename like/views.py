@@ -42,4 +42,4 @@ def likePost(request):
 
         return JsonResponse(data, safe=False)
 
-    return redirect('like:index')
+    return JsonResponse('likePost', safe=False)
